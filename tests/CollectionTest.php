@@ -27,8 +27,8 @@ class CollectionTest extends AbstractTestCase
     {
         $serializer = new PostSerializer3;
 
-        $post1 = (object) ['id' => 1, 'foo' => 'bar'];
-        $post2 = new Resource((object) ['id' => 2, 'foo' => 'baz'], $serializer);
+        $post1 = (object)['id' => 1, 'foo' => 'bar'];
+        $post2 = new Resource((object)['id' => 2, 'foo' => 'baz'], $serializer);
 
         $collection = new Collection([$post1, $post2], $serializer);
 
@@ -42,8 +42,8 @@ class CollectionTest extends AbstractTestCase
     {
         $serializer = new PostSerializer3;
 
-        $post1 = (object) ['id' => 1];
-        $post2 = (object) ['id' => 2];
+        $post1 = (object)['id' => 1];
+        $post2 = (object)['id' => 2];
 
         $collection = new Collection([$post1, $post2], $serializer);
 

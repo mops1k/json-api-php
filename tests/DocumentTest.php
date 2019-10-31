@@ -26,7 +26,7 @@ class DocumentTest extends AbstractTestCase
 {
     public function testToArrayIncludesTheResourcesRepresentation()
     {
-        $post = (object) [
+        $post = (object)[
             'id' => 1,
             'foo' => 'bar'
         ];
@@ -40,13 +40,13 @@ class DocumentTest extends AbstractTestCase
 
     public function testItCanBeSerializedToJson()
     {
-        $this->assertEquals('[]', (string) new Document());
+        $this->assertEquals('[]', (string)new Document());
     }
 
     public function testToArrayIncludesIncludedResources()
     {
-        $comment = (object) ['id' => 1, 'foo' => 'bar'];
-        $post = (object) ['id' => 1, 'foo' => 'bar', 'comments' => [$comment]];
+        $comment = (object)['id' => 1, 'foo' => 'bar'];
+        $post = (object)['id' => 1, 'foo' => 'bar', 'comments' => [$comment]];
 
         $resource = new Resource($post, new PostSerializer2);
         $includedResource = new Resource($comment, new CommentSerializer2);
@@ -63,7 +63,7 @@ class DocumentTest extends AbstractTestCase
 
     public function testNoEmptyAttributes()
     {
-        $post = (object) [
+        $post = (object)[
             'id' => 1,
         ];
 
@@ -71,7 +71,7 @@ class DocumentTest extends AbstractTestCase
 
         $document = new Document($resource);
 
-        $this->assertEquals('{"data":{"type":"posts","id":"1"}}', (string) $document, 'Attributes should be omitted');
+        $this->assertEquals('{"data":{"type":"posts","id":"1"}}', (string)$document, 'Attributes should be omitted');
     }
 }
 

@@ -21,7 +21,7 @@ class ResourceTest extends AbstractTestCase
 {
     public function testToArrayReturnsArray()
     {
-        $data = (object) ['id' => '123', 'foo' => 'bar', 'baz' => 'qux'];
+        $data = (object)['id' => '123', 'foo' => 'bar', 'baz' => 'qux'];
 
         $resource = new Resource($data, new PostSerializer4WithLinksAndMeta);
 
@@ -43,7 +43,7 @@ class ResourceTest extends AbstractTestCase
 
     public function testToIdentifierReturnsResourceIdentifier()
     {
-        $data = (object) ['id' => '123', 'foo' => 'bar'];
+        $data = (object)['id' => '123', 'foo' => 'bar'];
 
         $resource = new Resource($data, new PostSerializer4);
 
@@ -63,7 +63,7 @@ class ResourceTest extends AbstractTestCase
 
     public function testGetIdReturnsString()
     {
-        $data = (object) ['id' => 123];
+        $data = (object)['id' => 123];
 
         $resource = new Resource($data, new PostSerializer4);
 
@@ -79,7 +79,7 @@ class ResourceTest extends AbstractTestCase
 
     public function testCanFilterFields()
     {
-        $data = (object) ['id' => '123', 'foo' => 'bar', 'baz' => 'qux'];
+        $data = (object)['id' => '123', 'foo' => 'bar', 'baz' => 'qux'];
 
         $resource = new Resource($data, new PostSerializer4);
 
@@ -96,8 +96,8 @@ class ResourceTest extends AbstractTestCase
 
     public function testCanMergeWithAnotherResource()
     {
-        $post1 = (object) ['id' => '123', 'foo' => 'bar', 'comments' => [1]];
-        $post2 = (object) ['id' => '123', 'baz' => 'qux', 'comments' => [1, 2]];
+        $post1 = (object)['id' => '123', 'foo' => 'bar', 'comments' => [1]];
+        $post2 = (object)['id' => '123', 'baz' => 'qux', 'comments' => [1, 2]];
 
         $resource1 = new Resource($post1, new PostSerializer4);
         $resource2 = new Resource($post2, new PostSerializer4);
@@ -127,7 +127,7 @@ class ResourceTest extends AbstractTestCase
 
     public function testLinksMergeWithSerializerLinks()
     {
-        $post1 = (object) ['id' => '123', 'foo' => 'bar', 'comments' => [1]];
+        $post1 = (object)['id' => '123', 'foo' => 'bar', 'comments' => [1]];
 
         $resource1 = new Resource($post1, new PostSerializer4WithLinksAndMeta());
         $resource1->addLink('self', 'overridden/by/resource');
@@ -151,7 +151,7 @@ class ResourceTest extends AbstractTestCase
 
     public function testMetaMergeWithSerializerLinks()
     {
-        $post1 = (object) ['id' => '123', 'foo' => 'bar', 'comments' => [1]];
+        $post1 = (object)['id' => '123', 'foo' => 'bar', 'comments' => [1]];
 
         $resource1 = new Resource($post1, new PostSerializer4WithLinksAndMeta());
         $resource1->addMeta('some-meta', 'overridden-by-resource');
@@ -173,7 +173,7 @@ class ResourceTest extends AbstractTestCase
 
     public function testEmptyToOneRelationships()
     {
-        $post1 = (object) ['id' => '123', 'foo' => 'bar'];
+        $post1 = (object)['id' => '123', 'foo' => 'bar'];
 
         $resource1 = new Resource($post1, new PostSerializer4());
         $resource1->with('author');
@@ -192,7 +192,7 @@ class ResourceTest extends AbstractTestCase
 
     public function testEmptyToManyRelationships()
     {
-        $post1 = (object) ['id' => '123', 'foo' => 'bar'];
+        $post1 = (object)['id' => '123', 'foo' => 'bar'];
 
         $resource1 = new Resource($post1, new PostSerializer4());
         $resource1->with('likes');
@@ -243,6 +243,7 @@ class PostSerializer4 extends AbstractSerializer
         return new Relationship(new Collection([], new CommentSerializer));
     }
 }
+
 class PostSerializer4WithLinksAndMeta extends PostSerializer4
 {
     public function getLinks($post)

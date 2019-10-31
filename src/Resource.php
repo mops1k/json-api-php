@@ -77,7 +77,7 @@ class Resource implements ElementInterface
     {
         $array = $this->toIdentifier();
 
-        if (! $this->isIdentifier()) {
+        if (!$this->isIdentifier()) {
             $attributes = $this->getAttributes();
             if ($attributes) {
                 $array['attributes'] = $attributes;
@@ -91,26 +91,26 @@ class Resource implements ElementInterface
         }
 
         $links = [];
-        if (! empty($this->links)) {
+        if (!empty($this->links)) {
             $links = $this->links;
         }
         $serializerLinks = $this->serializer->getLinks($this->data);
-        if (! empty($serializerLinks)) {
+        if (!empty($serializerLinks)) {
             $links = array_merge($serializerLinks, $links);
         }
-        if (! empty($links)) {
+        if (!empty($links)) {
             $array['links'] = $links;
         }
 
         $meta = [];
-        if (! empty($this->meta)) {
+        if (!empty($this->meta)) {
             $meta = $this->meta;
         }
         $serializerMeta = $this->serializer->getMeta($this->data);
-        if (! empty($serializerMeta)) {
+        if (!empty($serializerMeta)) {
             $meta = array_merge($serializerMeta, $meta);
         }
-        if (! empty($meta)) {
+        if (!empty($meta)) {
             $array['meta'] = $meta;
         }
 
@@ -125,7 +125,7 @@ class Resource implements ElementInterface
      */
     public function isIdentifier()
     {
-        return ! is_object($this->data) && ! is_array($this->data);
+        return !is_object($this->data) && !is_array($this->data);
     }
 
     /**
@@ -133,8 +133,8 @@ class Resource implements ElementInterface
      */
     public function toIdentifier()
     {
-        if (! $this->data) {
-            return;
+        if (!$this->data) {
+            return null;
         }
 
         $array = [
@@ -142,7 +142,7 @@ class Resource implements ElementInterface
             'id' => $this->getId()
         ];
 
-        if (! empty($this->meta)) {
+        if (!empty($this->meta)) {
             $array['meta'] = $this->meta;
         }
 
@@ -166,11 +166,11 @@ class Resource implements ElementInterface
      */
     public function getId()
     {
-        if (! is_object($this->data) && ! is_array($this->data)) {
-            return (string) $this->data;
+        if (!is_object($this->data) && !is_array($this->data)) {
+            return (string)$this->data;
         }
 
-        return (string) $this->serializer->getId($this->data);
+        return (string)$this->serializer->getId($this->data);
     }
 
     /**
@@ -180,7 +180,7 @@ class Resource implements ElementInterface
      */
     public function getAttributes()
     {
-        $attributes = (array) $this->serializer->getAttributes($this->data, $this->getOwnFields());
+        $attributes = (array)$this->serializer->getAttributes($this->data, $this->getOwnFields());
 
         $attributes = $this->filterFields($attributes);
 
@@ -201,6 +201,8 @@ class Resource implements ElementInterface
         if (isset($this->fields[$type])) {
             return $this->fields[$type];
         }
+
+        return null;
     }
 
     /**
@@ -229,11 +231,12 @@ class Resource implements ElementInterface
      */
     protected function mergeAttributes(array $attributes)
     {
+        $results = [];
         foreach ($this->merged as $resource) {
-            $attributes = array_replace_recursive($attributes, $resource->getAttributes());
+            $results[] = $resource->getAttributes();
         }
 
-        return $attributes;
+        return array_replace_recursive($attributes, ...$results);
     }
 
     /**
@@ -243,9 +246,7 @@ class Resource implements ElementInterface
      */
     public function getRelationships()
     {
-        $relationships = $this->buildRelationships();
-
-        return $this->filterFields($relationships);
+        return $this->filterFields($this->getUnfilteredRelationships());
     }
 
     /**
@@ -254,30 +255,6 @@ class Resource implements ElementInterface
      * @return \Tobscure\JsonApi\Relationship[]
      */
     public function getUnfilteredRelationships()
-    {
-        return $this->buildRelationships();
-    }
-
-    /**
-     * Get the resource relationships as an array.
-     *
-     * @return array
-     */
-    public function getRelationshipsAsArray()
-    {
-        $relationships = $this->getRelationships();
-
-        $relationships = $this->convertRelationshipsToArray($relationships);
-
-        return $this->mergeRelationships($relationships);
-    }
-
-    /**
-     * Get an array of built relationships.
-     *
-     * @return \Tobscure\JsonApi\Relationship[]
-     */
-    protected function buildRelationships()
     {
         if (isset($this->relationships)) {
             return $this->relationships;
@@ -304,6 +281,20 @@ class Resource implements ElementInterface
     }
 
     /**
+     * Get the resource relationships as an array.
+     *
+     * @return array
+     */
+    public function getRelationshipsAsArray()
+    {
+        $relationships = $this->getRelationships();
+
+        $relationships = $this->convertRelationshipsToArray($relationships);
+
+        return $this->mergeRelationships($relationships);
+    }
+
+    /**
      * Merge the relationships of merged resources into an array of
      * relationships.
      *
@@ -313,11 +304,12 @@ class Resource implements ElementInterface
      */
     protected function mergeRelationships(array $relationships)
     {
-        foreach ($this->merged as $resource) {
-            $relationships = array_replace_recursive($relationships, $resource->getRelationshipsAsArray());
+        $results = [];
+        foreach ($this->merged as $key => $resource) {
+            $results[$key] = $resource->getRelationshipsAsArray();
         }
 
-        return $relationships;
+        return array_replace_recursive($relationships, ...$results);
     }
 
     /**
@@ -329,9 +321,12 @@ class Resource implements ElementInterface
      */
     protected function convertRelationshipsToArray(array $relationships)
     {
-        return array_map(function (Relationship $relationship) {
-            return $relationship->toArray();
-        }, $relationships);
+        $results = [];
+        foreach ($relationships as $key => $relationship) {
+            $results[$key] = $relationship->toArray();
+        }
+
+        return $results;
     }
 
     /**
@@ -351,7 +346,7 @@ class Resource implements ElementInterface
      */
     public function with($relationships)
     {
-        $this->includes = array_unique(array_merge($this->includes, (array) $relationships));
+        $this->includes = array_unique(array_merge($this->includes, (array)$relationships));
 
         $this->relationships = null;
 

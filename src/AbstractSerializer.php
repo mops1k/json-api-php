@@ -74,7 +74,7 @@ abstract class AbstractSerializer implements SerializerInterface
         if (method_exists($this, $method)) {
             $relationship = $this->$method($model);
 
-            if ($relationship !== null && ! ($relationship instanceof Relationship)) {
+            if ($relationship !== null && !($relationship instanceof Relationship)) {
                 throw new LogicException('Relationship method must return null or an instance of Tobscure\JsonApi\Relationship');
             }
 
@@ -91,13 +91,13 @@ abstract class AbstractSerializer implements SerializerInterface
      *
      * @return string
      */
-    private function getRelationshipMethodName($name)
+    private function getRelationshipMethodName($name): string
     {
-        if (stripos($name, '-')) {
+        if (strpos($name, '-')) {
             $name = lcfirst(implode('', array_map('ucfirst', explode('-', $name))));
         }
 
-        if (stripos($name, '_')) {
+        if (strpos($name, '_')) {
             $name = lcfirst(implode('', array_map('ucfirst', explode('_', $name))));
         }
 

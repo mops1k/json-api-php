@@ -66,15 +66,15 @@ class Relationship
     {
         $array = [];
 
-        if (! empty($this->data)) {
+        if (!empty($this->data)) {
             $array['data'] = $this->data->toIdentifier();
         }
 
-        if (! empty($this->meta)) {
+        if (!empty($this->meta)) {
             $array['meta'] = $this->meta;
         }
 
-        if (! empty($this->links)) {
+        if (!empty($this->links)) {
             $array['links'] = $this->links;
         }
 

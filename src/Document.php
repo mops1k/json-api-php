@@ -83,7 +83,7 @@ class Document implements JsonSerializable
             foreach ($resource->getUnfilteredRelationships() as $relationship) {
                 $includedElement = $relationship->getData();
 
-                if (! $includedElement instanceof ElementInterface) {
+                if (!$includedElement instanceof ElementInterface) {
                     continue;
                 }
 
@@ -91,7 +91,7 @@ class Document implements JsonSerializable
                     // If this resource is the same as the top-level "data"
                     // resource, then we don't want it to show up again in the
                     // "included" array.
-                    if (! $includeParent && $child->getType() === $type && $child->getId() === $id) {
+                    if (!$includeParent && $child->getType() === $type && $child->getId() === $id) {
                         continue;
                     }
 
@@ -180,11 +180,11 @@ class Document implements JsonSerializable
     {
         $document = [];
 
-        if (! empty($this->links)) {
+        if (!empty($this->links)) {
             $document['links'] = $this->links;
         }
 
-        if (! empty($this->data)) {
+        if (!empty($this->data)) {
             $document['data'] = $this->data->toArray();
 
             $resources = $this->getIncluded($this->data);
@@ -196,15 +196,15 @@ class Document implements JsonSerializable
             }
         }
 
-        if (! empty($this->meta)) {
+        if (!empty($this->meta)) {
             $document['meta'] = $this->meta;
         }
 
-        if (! empty($this->errors)) {
+        if (!empty($this->errors)) {
             $document['errors'] = $this->errors;
         }
 
-        if (! empty($this->jsonapi)) {
+        if (!empty($this->jsonapi)) {
             $document['jsonapi'] = $this->jsonapi;
         }
 
