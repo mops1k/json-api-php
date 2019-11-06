@@ -1,17 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi\Exception\Handler;
-
-use Exception;
+namespace JsonApi\Exception\Handler;
 
 class FallbackExceptionHandler implements ExceptionHandlerInterface
 {
@@ -31,7 +21,7 @@ class FallbackExceptionHandler implements ExceptionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function manages(Exception $e)
+    public function manages(\Exception $e): bool
     {
         return true;
     }
@@ -39,7 +29,7 @@ class FallbackExceptionHandler implements ExceptionHandlerInterface
     /**
      * {@inheritdoc}
      */
-    public function handle(Exception $e)
+    public function handle(\Exception $e): ResponseBag
     {
         $status = 500;
         $error = $this->constructError($e, $status);
@@ -53,7 +43,7 @@ class FallbackExceptionHandler implements ExceptionHandlerInterface
      *
      * @return array
      */
-    private function constructError(Exception $e, $status)
+    private function constructError(\Exception $e, $status)
     {
         $error = ['code' => $status, 'title' => 'Internal server error'];
 

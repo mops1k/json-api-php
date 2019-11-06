@@ -1,17 +1,9 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests;
 
-namespace Tobscure\Tests\JsonApi;
-
-use Tobscure\JsonApi\Parameters;
+use JsonApi\Parameters;
 
 /**
  * This is the parameters test class.
@@ -35,7 +27,7 @@ class ParametersTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \Tobscure\JsonApi\Exception\InvalidParameterException
+     * @expectedException \JsonApi\Exception\InvalidParameterException
      * @expectedExceptionCode 1
      */
     public function testGetIncludeWithUnallowedField()
@@ -67,7 +59,7 @@ class ParametersTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \Tobscure\JsonApi\Exception\InvalidParameterException
+     * @expectedException \JsonApi\Exception\InvalidParameterException
      * @expectedExceptionCode 3
      */
     public function testGetSortWithUnallowedField()
@@ -85,7 +77,7 @@ class ParametersTest extends AbstractTestCase
     }
 
     /**
-     * @expectedException \Tobscure\JsonApi\Exception\InvalidParameterException
+     * @expectedException \JsonApi\Exception\InvalidParameterException
      * @expectedExceptionCode 2
      */
     public function testGetOffsetIsAtLeastZero()

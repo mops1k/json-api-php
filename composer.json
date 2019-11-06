@@ -1,5 +1,5 @@
 {
-  "name": "bavix/json-api",
+  "name": "mops1k/json-api",
   "description": "JSON-API responses in PHP",
   "keywords": [
     "json",
@@ -12,22 +12,27 @@
     {
       "name": "Toby Zerner",
       "email": "toby.zerner@gmail.com"
+    },
+    {
+      "name": "Aleksandr Kvintilyanov",
+      "email": "bednyj.mops@gmail.com"
     }
   ],
   "require": {
-    "php": "^7.0"
+    "php": "^7.3",
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "^4.8 || ^5.0"
   },
   "autoload": {
     "psr-4": {
-      "Tobscure\\JsonApi\\": "src/"
+      "JsonApi\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Tobscure\\Tests\\JsonApi\\": "tests/"
+      "JsonApi\\Tests\\": "tests/"
     }
   },
   "extra": {

@@ -1,31 +1,23 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests\Stubs\Serializers;
 
-namespace Tobscure\Tests\JsonApi\Stubs\Serializers;
-
-use Tobscure\JsonApi\AbstractSerializer;
-use Tobscure\JsonApi\PolymorphicCollection;
-use Tobscure\JsonApi\Relationship;
-use Tobscure\Tests\JsonApi\Stubs\Serializables\Garage;
+use JsonApi\AbstractSerializer;
+use JsonApi\PolymorphicCollection;
+use JsonApi\Relationship;
+use JsonApi\Tests\Stubs\Serializables\Garage;
 
 class GarageSerializer extends AbstractSerializer
 {
     protected $type = 'garages';
 
-    public function getAttributes($garage, array $fields = null)
+    public function getAttributes($garage, array $fields = null): array
     {
         return [];
     }
 
-    public function vehicles(Garage $garage)
+    public function vehicles(Garage $garage): Relationship
     {
         $element = new PolymorphicCollection(
             $garage->vehicles,

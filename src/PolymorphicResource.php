@@ -1,23 +1,13 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi;
 
-namespace Tobscure\JsonApi;
-
-use Tobscure\JsonApi\Resource as JsonApiResource;
-
-class PolymorphicResource extends JsonApiResource
+class PolymorphicResource extends Resource
 {
     /**
      * @param mixed $data
-     * @param \Tobscure\JsonApi\SerializerRegistryInterface $serializers
+     * @param SerializerRegistryInterface $serializers
      */
     public function __construct($data, SerializerRegistryInterface $serializers)
     {

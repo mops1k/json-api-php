@@ -1,15 +1,6 @@
 <?php
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 interface SerializerInterface
 {
@@ -20,7 +11,7 @@ interface SerializerInterface
      *
      * @return string
      */
-    public function getType($model);
+    public function getType($model): string;
 
     /**
      * Get the id.
@@ -29,7 +20,7 @@ interface SerializerInterface
      *
      * @return string
      */
-    public function getId($model);
+    public function getId($model): string;
 
     /**
      * Get the attributes array.
@@ -39,7 +30,7 @@ interface SerializerInterface
      *
      * @return array
      */
-    public function getAttributes($model, array $fields = null);
+    public function getAttributes($model, array $fields = null): array;
 
     /**
      * Get the links array.
@@ -48,7 +39,7 @@ interface SerializerInterface
      *
      * @return array
      */
-    public function getLinks($model);
+    public function getLinks($model): array;
 
     /**
      * Get the meta.
@@ -57,7 +48,7 @@ interface SerializerInterface
      *
      * @return array
      */
-    public function getMeta($model);
+    public function getMeta($model): array;
 
     /**
      * Get a relationship.
@@ -65,7 +56,7 @@ interface SerializerInterface
      * @param mixed $model
      * @param string $name
      *
-     * @return \Tobscure\JsonApi\Relationship|null
+     * @return Relationship|null
      */
-    public function getRelationship($model, $name);
+    public function getRelationship($model, $name): ?Relationship;
 }

@@ -1,20 +1,11 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests;
 
-namespace Tobscure\Tests\JsonApi\Element;
-
-use Tobscure\JsonApi\AbstractSerializer;
-use Tobscure\JsonApi\Collection;
-use Tobscure\JsonApi\Resource;
-use Tobscure\Tests\JsonApi\AbstractTestCase;
+use JsonApi\AbstractSerializer;
+use JsonApi\Collection;
+use JsonApi\Resource;
 
 /**
  * This is the collection test class.
@@ -56,9 +47,9 @@ class CollectionTest extends AbstractTestCase
 
 class PostSerializer3 extends AbstractSerializer
 {
-    protected $type = 'posts';
+    public const TYPE = 'posts';
 
-    public function getAttributes($post, array $fields = null)
+    public function getAttributes($post, array $fields = null): array
     {
         return ['foo' => $post->foo];
     }

@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 class Resource implements ElementInterface
 {
@@ -22,7 +14,7 @@ class Resource implements ElementInterface
     protected $data;
 
     /**
-     * @var \Tobscure\JsonApi\SerializerInterface
+     * @var SerializerInterface
      */
     protected $serializer;
 
@@ -43,29 +35,29 @@ class Resource implements ElementInterface
     /**
      * An array of Resources that should be merged into this one.
      *
-     * @var \Tobscure\JsonApi\Resource[]
+     * @var Resource[]
      */
     protected $merged = [];
 
     /**
-     * @var \Tobscure\JsonApi\Relationship[]
+     * @var Relationship[]
      */
     private $relationships;
 
     /**
-     * @param mixed $data
-     * @param \Tobscure\JsonApi\SerializerInterface $serializer
+     * @param mixed               $data
+     * @param SerializerInterface $serializer
      */
     public function __construct($data, SerializerInterface $serializer)
     {
-        $this->data = $data;
+        $this->data       = $data;
         $this->serializer = $serializer;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getResources()
+    public function getResources(): array
     {
         return [$this];
     }
@@ -73,7 +65,7 @@ class Resource implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = $this->toIdentifier();
 
@@ -123,7 +115,7 @@ class Resource implements ElementInterface
      *
      * @return bool
      */
-    public function isIdentifier()
+    public function isIdentifier(): bool
     {
         return !is_object($this->data) && !is_array($this->data);
     }
@@ -131,7 +123,7 @@ class Resource implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function toIdentifier()
+    public function toIdentifier(): ?array
     {
         if (!$this->data) {
             return null;
@@ -154,7 +146,7 @@ class Resource implements ElementInterface
      *
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->serializer->getType($this->data);
     }
@@ -164,13 +156,13 @@ class Resource implements ElementInterface
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         if (!is_object($this->data) && !is_array($this->data)) {
             return (string)$this->data;
         }
 
-        return (string)$this->serializer->getId($this->data);
+        return $this->serializer->getId($this->data);
     }
 
     /**
@@ -178,9 +170,9 @@ class Resource implements ElementInterface
      *
      * @return array
      */
-    public function getAttributes()
+    public function getAttributes(): array
     {
-        $attributes = (array)$this->serializer->getAttributes($this->data, $this->getOwnFields());
+        $attributes = $this->serializer->getAttributes($this->data, $this->getOwnFields());
 
         $attributes = $this->filterFields($attributes);
 
@@ -194,15 +186,11 @@ class Resource implements ElementInterface
      *
      * @return array|null
      */
-    protected function getOwnFields()
+    protected function getOwnFields(): ?array
     {
         $type = $this->getType();
 
-        if (isset($this->fields[$type])) {
-            return $this->fields[$type];
-        }
-
-        return null;
+        return $this->fields[$type] ?? null;
     }
 
     /**
@@ -213,10 +201,10 @@ class Resource implements ElementInterface
      *
      * @return array
      */
-    protected function filterFields(array $fields)
+    protected function filterFields(array $fields): array
     {
         if ($requested = $this->getOwnFields()) {
-            $fields = array_intersect_key($fields, array_flip($requested));
+            $fields = \array_intersect_key($fields, \array_flip($requested));
         }
 
         return $fields;
@@ -229,22 +217,22 @@ class Resource implements ElementInterface
      *
      * @return array
      */
-    protected function mergeAttributes(array $attributes)
+    protected function mergeAttributes(array $attributes): array
     {
         $results = [];
         foreach ($this->merged as $resource) {
             $results[] = $resource->getAttributes();
         }
 
-        return array_replace_recursive($attributes, ...$results);
+        return \array_replace_recursive($attributes, ...$results);
     }
 
     /**
      * Get the resource relationships.
      *
-     * @return \Tobscure\JsonApi\Relationship[]
+     * @return Relationship[]
      */
-    public function getRelationships()
+    public function getRelationships(): array
     {
         return $this->filterFields($this->getUnfilteredRelationships());
     }
@@ -252,9 +240,9 @@ class Resource implements ElementInterface
     /**
      * Get the resource relationships without considering requested ones.
      *
-     * @return \Tobscure\JsonApi\Relationship[]
+     * @return Relationship[]|array
      */
-    public function getUnfilteredRelationships()
+    public function getUnfilteredRelationships(): array
     {
         if (isset($this->relationships)) {
             return $this->relationships;
@@ -285,7 +273,7 @@ class Resource implements ElementInterface
      *
      * @return array
      */
-    public function getRelationshipsAsArray()
+    public function getRelationshipsAsArray(): array
     {
         $relationships = $this->getRelationships();
 
@@ -302,24 +290,24 @@ class Resource implements ElementInterface
      *
      * @return array
      */
-    protected function mergeRelationships(array $relationships)
+    protected function mergeRelationships(array $relationships): array
     {
         $results = [];
         foreach ($this->merged as $key => $resource) {
             $results[$key] = $resource->getRelationshipsAsArray();
         }
 
-        return array_replace_recursive($relationships, ...$results);
+        return \array_replace_recursive($relationships, ...$results);
     }
 
     /**
      * Convert the given array of Relationship objects into an array.
      *
-     * @param \Tobscure\JsonApi\Relationship[] $relationships
+     * @param Relationship[] $relationships
      *
      * @return array
      */
-    protected function convertRelationshipsToArray(array $relationships)
+    protected function convertRelationshipsToArray(array $relationships): array
     {
         $results = [];
         foreach ($relationships as $key => $relationship) {
@@ -332,11 +320,11 @@ class Resource implements ElementInterface
     /**
      * Merge a resource into this one.
      *
-     * @param \Tobscure\JsonApi\Resource $resource
+     * @param Resource $resource
      *
      * @return void
      */
-    public function merge(Resource $resource)
+    public function merge(Resource $resource): void
     {
         $this->merged[] = $resource;
     }
@@ -344,9 +332,9 @@ class Resource implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function with($relationships)
+    public function with(array $relationships)
     {
-        $this->includes = array_unique(array_merge($this->includes, (array)$relationships));
+        $this->includes = \array_unique(\array_merge($this->includes, $relationships));
 
         $this->relationships = null;
 
@@ -356,7 +344,7 @@ class Resource implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function fields($fields)
+    public function fields(?array $fields)
     {
         $this->fields = $fields;
 
@@ -374,28 +362,32 @@ class Resource implements ElementInterface
     /**
      * @param mixed $data
      *
-     * @return void
+     * @return $this
      */
     public function setData($data)
     {
         $this->data = $data;
+
+        return $this;
     }
 
     /**
-     * @return \Tobscure\JsonApi\SerializerInterface
+     * @return SerializerInterface
      */
-    public function getSerializer()
+    public function getSerializer(): SerializerInterface
     {
         return $this->serializer;
     }
 
     /**
-     * @param \Tobscure\JsonApi\SerializerInterface $serializer
+     * @param SerializerInterface $serializer
      *
-     * @return void
+     * @return $this
      */
     public function setSerializer(SerializerInterface $serializer)
     {
         $this->serializer = $serializer;
+
+        return $this;
     }
 }

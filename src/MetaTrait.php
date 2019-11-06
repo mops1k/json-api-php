@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 trait MetaTrait
 {
@@ -25,7 +17,7 @@ trait MetaTrait
      *
      * @return array
      */
-    public function getMeta()
+    public function getMeta(): array
     {
         return $this->meta;
     }
@@ -48,11 +40,11 @@ trait MetaTrait
      * Add meta data.
      *
      * @param string $key
-     * @param string $value
+     * @param mixed  $value
      *
      * @return $this
      */
-    public function addMeta($key, $value)
+    public function addMeta(string $key, $value)
     {
         $this->meta[$key] = $value;
 

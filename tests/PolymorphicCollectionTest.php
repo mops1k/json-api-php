@@ -9,15 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Tobscure\Tests\JsonApi\Element;
+namespace JsonApi\Tests;
 
-use Tobscure\JsonApi\PolymorphicCollection;
-use Tobscure\JsonApi\PolymorphicResource;
-use Tobscure\Tests\JsonApi\AbstractTestCase;
-use Tobscure\Tests\JsonApi\Stubs\Serializables\Bike;
-use Tobscure\Tests\JsonApi\Stubs\Serializables\Car;
-use Tobscure\Tests\JsonApi\Stubs\Serializables\Garage;
-use Tobscure\Tests\JsonApi\Stubs\Serializers\VehicleSerializerRegistry;
+use JsonApi\PolymorphicCollection;
+use JsonApi\PolymorphicResource;
+use JsonApi\Tests\Stubs\Serializables\Bike;
+use JsonApi\Tests\Stubs\Serializables\Car;
+use JsonApi\Tests\Stubs\Serializables\Garage;
+use JsonApi\Tests\Stubs\Serializers\VehicleSerializerRegistry;
 
 class PolymorphicCollectionTest extends AbstractTestCase
 {

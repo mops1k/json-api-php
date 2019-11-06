@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 trait LinksTrait
 {
@@ -18,14 +10,14 @@ trait LinksTrait
      *
      * @var array
      */
-    protected $links;
+    protected $links = [];
 
     /**
      * Get the links.
      *
      * @return array
      */
-    public function getLinks()
+    public function getLinks(): array
     {
         return $this->links;
     }
@@ -70,24 +62,24 @@ trait LinksTrait
      *
      * @return void
      */
-    public function addPaginationLinks($url, array $queryParams, $offset, $limit, $total = null)
+    public function addPaginationLinks(string $url, array $queryParams, int $offset, int $limit, ?int $total = null): void
     {
         if (isset($queryParams['page']['number'])) {
-            $offset = floor($offset / $limit) * $limit;
+            $offset = \floor($offset / $limit) * $limit;
         }
 
         $this->addPaginationLink('first', $url, $queryParams, 0, $limit);
 
         if ($offset > 0) {
-            $this->addPaginationLink('prev', $url, $queryParams, max(0, $offset - $limit), $limit);
+            $this->addPaginationLink('prev', $url, $queryParams, (int) \max(0, $offset - $limit), $limit);
         }
 
         if ($total === null || $offset + $limit < $total) {
-            $this->addPaginationLink('next', $url, $queryParams, $offset + $limit, $limit);
+            $this->addPaginationLink('next', $url, $queryParams, (int) ($offset + $limit), $limit);
         }
 
         if ($total) {
-            $this->addPaginationLink('last', $url, $queryParams, floor(($total - 1) / $limit) * $limit, $limit);
+            $this->addPaginationLink('last', $url, $queryParams, (int) \floor(($total - 1) / $limit) * $limit, $limit);
         }
     }
 
@@ -102,7 +94,7 @@ trait LinksTrait
      *
      * @return void
      */
-    protected function addPaginationLink($name, $url, array $queryParams, $offset, $limit)
+    protected function addPaginationLink(string $name, string $url, array $queryParams, int $offset, int $limit): void
     {
         if (!isset($queryParams['page']) || !is_array($queryParams['page'])) {
             $queryParams['page'] = [];
@@ -128,7 +120,7 @@ trait LinksTrait
             $page['limit'] = $limit;
         }
 
-        $queryString = http_build_query($queryParams);
+        $queryString = \http_build_query($queryParams);
 
         $this->addLink($name, $url . ($queryString ? '?' . $queryString : ''));
     }

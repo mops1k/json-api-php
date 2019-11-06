@@ -1,11 +1,5 @@
 # PHP JSON-API
 
-[![Build Status](https://img.shields.io/travis/tobscure/json-api/master.svg?style=flat)](https://travis-ci.org/tobscure/json-api)
-[![Coverage Status](https://img.shields.io/scrutinizer/coverage/g/tobscure/json-api.svg?style=flat)](https://scrutinizer-ci.com/g/tobscure/json-api/code-structure)
-[![Quality Score](https://img.shields.io/scrutinizer/g/tobscure/json-api.svg?style=flat)](https://scrutinizer-ci.com/g/tobscure/json-api)
-[![Pre Release](https://img.shields.io/packagist/vpre/tobscure/json-api.svg?style=flat)](https://github.com/tobscure/json-api/releases)
-[![License](https://img.shields.io/packagist/l/tobscure/json-api.svg?style=flat)](https://packagist.org/packages/tobscure/json-api)
-
 [JSON-API](http://jsonapi.org) responses in PHP.
 
 Works with version 1.0 of the spec.
@@ -15,14 +9,14 @@ Works with version 1.0 of the spec.
 via Composer:
 
 ```bash
-composer require tobscure/json-api
+composer require mops1k/json-api
 ```
 
 ## Usage
 
 ```php
-use Tobscure\JsonApi\Document;
-use Tobscure\JsonApi\Collection;
+use JsonApi\Document;
+use JsonApi\Collection;
 
 // Create a new collection of posts, and specify relationships to be included.
 $collection = (new Collection($posts, new PostSerializer))
@@ -43,8 +37,8 @@ echo json_encode($document);
 
 The JSON-API spec describes *resource objects* as objects containing information about a single resource, and *collection objects* as objects containing information about many resources. In this package:
 
-- `Tobscure\JsonApi\Resource` represents a *resource object*
-- `Tobscure\JsonApi\Collection` represents a *collection object*
+- `JsonApi\Resource` represents a *resource object*
+- `JsonApi\Collection` represents a *collection object*
 
 Both Resources and Collections are termed as *Elements*. In conceptually the same way that the JSON-API spec describes, a Resource may have **relationships** with any number of other Elements (Resource for has-one relationships, Collection for has-many). Similarly, a Collection may contain many Resources.
 
@@ -63,7 +57,7 @@ $collection->fields(['posts' => ['title', 'date']]);
 A Serializer is responsible for building attributes and relationships for a certain resource type. Serializers must implement `Tobscure\JsonApi\SerializerInterface`. An `AbstractSerializer` is provided with some basic functionality. At a minimum, a serializer must specify its **type** and provide a method to transform **attributes**:
 
 ```php
-use Tobscure\JsonApi\AbstractSerializer;
+use JsonApi\AbstractSerializer;
 
 class PostSerializer extends AbstractSerializer
 {
@@ -143,7 +137,7 @@ $document->addPaginationLinks(
 Serializers can provide links and/or meta data as well:
 
 ```php
-use Tobscure\JsonApi\AbstractSerializer;
+use JsonApi\AbstractSerializer;
 
 class PostSerializer extends AbstractSerializer
 {
@@ -163,10 +157,10 @@ class PostSerializer extends AbstractSerializer
 
 ### Parameters
 
-The `Tobscure\JsonApi\Parameters` class allows you to easily parse and validate query parameters in accordance with the specification.
+The `JsonApi\Parameters` class allows you to easily parse and validate query parameters in accordance with the specification.
 
 ```php
-use Tobscure\JsonApi\Parameters;
+use JsonApi\Parameters;
 
 $parameters = new Parameters($_GET);
 ```
@@ -214,7 +208,7 @@ $offset = $parameters->getOffset(); // 20
 
 ### Error Handling
 
-You can transform caught exceptions into JSON-API error documents using the `Tobscure\JsonApi\ErrorHandler` class. You must register the appropriate `Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface` instances.
+You can transform caught exceptions into JSON-API error documents using the `JsonApi\ErrorHandler` class. You must register the appropriate `JsonApi\Exception\Handler\ExceptionHandlerInterface` instances.
 
 ```php
 try {

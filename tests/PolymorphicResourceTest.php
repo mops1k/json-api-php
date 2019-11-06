@@ -1,21 +1,13 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests;
 
-namespace Tobscure\Tests\JsonApi\Element;
-
-use Tobscure\JsonApi\PolymorphicResource;
-use Tobscure\Tests\JsonApi\AbstractTestCase;
-use Tobscure\Tests\JsonApi\Stubs\Serializables\Bike;
-use Tobscure\Tests\JsonApi\Stubs\Serializables\Car;
-use Tobscure\Tests\JsonApi\Stubs\Serializers\VehicleSerializerRegistry;
+use JsonApi\PolymorphicResource;
+use JsonApi\Tests\AbstractTestCase;
+use JsonApi\Tests\Stubs\Serializables\Bike;
+use JsonApi\Tests\Stubs\Serializables\Car;
+use JsonApi\Tests\Stubs\Serializers\VehicleSerializerRegistry;
 
 class PolymorphicResourceTest extends AbstractTestCase
 {

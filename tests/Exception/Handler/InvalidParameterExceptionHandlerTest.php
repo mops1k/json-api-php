@@ -1,20 +1,11 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests\Exception\Handler;
 
-namespace Tobscure\Tests\Exception\Handler;
-
-use Exception;
-use Tobscure\JsonApi\Exception\Handler\InvalidParameterExceptionHandler;
-use Tobscure\JsonApi\Exception\Handler\ResponseBag;
-use Tobscure\JsonApi\Exception\InvalidParameterException;
+use JsonApi\Exception\Handler\InvalidParameterExceptionHandler;
+use JsonApi\Exception\Handler\ResponseBag;
+use JsonApi\Exception\InvalidParameterException;
 
 class InvalidParameterExceptionHandlerTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +20,7 @@ class InvalidParameterExceptionHandlerTest extends \PHPUnit_Framework_TestCase
     {
         $handler = new InvalidParameterExceptionHandler();
 
-        $this->assertFalse($handler->manages(new Exception));
+        $this->assertFalse($handler->manages(new \Exception));
     }
 
     public function testErrorHandling()

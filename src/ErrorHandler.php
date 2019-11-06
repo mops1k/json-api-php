@@ -1,39 +1,29 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi;
 
-namespace Tobscure\JsonApi;
-
-use Exception;
-use RuntimeException;
-use Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface;
+use JsonApi\Exception\Handler\ExceptionHandlerInterface;
+use JsonApi\Exception\Handler\ResponseBag;
 
 class ErrorHandler
 {
     /**
      * Stores the valid handlers.
      *
-     * @var \Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface[]
+     * @var ExceptionHandlerInterface[]
      */
     private $handlers = [];
 
     /**
      * Handle the exception provided.
      *
-     * @param Exception $e
+     * @param \Exception $e
      *
-     * @return \Tobscure\JsonApi\Exception\Handler\ResponseBag
-     * @throws RuntimeException
-     *
+     * @return ResponseBag
+     * @throws \RuntimeException
      */
-    public function handle(Exception $e)
+    public function handle(\Exception $e): ResponseBag
     {
         foreach ($this->handlers as $handler) {
             if ($handler->manages($e)) {
@@ -41,17 +31,19 @@ class ErrorHandler
             }
         }
 
-        throw new RuntimeException('Exception handler for ' . get_class($e) . ' not found.');
+        throw new \RuntimeException(
+            \sprintf('Exception handler for %s not found.', \get_class($e))
+        );
     }
 
     /**
      * Register a new exception handler.
      *
-     * @param \Tobscure\JsonApi\Exception\Handler\ExceptionHandlerInterface $handler
+     * @param ExceptionHandlerInterface $handler
      *
      * @return void
      */
-    public function registerHandler(ExceptionHandlerInterface $handler)
+    public function registerHandler(ExceptionHandlerInterface $handler): void
     {
         $this->handlers[] = $handler;
     }

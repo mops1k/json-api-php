@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi\Exception\Handler;
+namespace JsonApi\Exception\Handler;
 
 use Exception;
 
@@ -23,14 +15,14 @@ interface ExceptionHandlerInterface
      *
      * @return bool
      */
-    public function manages(Exception $e);
+    public function manages(Exception $e): bool;
 
     /**
      * Handle the provided exception.
      *
      * @param \Exception $e
      *
-     * @return \Tobscure\JsonApi\Exception\Handler\ResponseBag
+     * @return ResponseBag
      */
-    public function handle(Exception $e);
+    public function handle(Exception $e): ResponseBag;
 }

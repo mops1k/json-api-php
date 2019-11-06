@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 use RuntimeException;
 
@@ -21,17 +13,16 @@ abstract class AbstractSerializerRegistry implements SerializerRegistryInterface
     protected $serializers = [];
 
     /**
-     * Instantiate serializer from the serializable object.
-     *
-     * @param object $serializable
-     * @return \Tobscure\JsonApi\SerializerInterface
+     * @inheritDoc
      */
-    public function getFromSerializable($serializable)
+    public function getFromSerializable($serializable): SerializerInterface
     {
-        $class = get_class($serializable);
+        $class = \get_class($serializable);
 
         if (! isset($this->serializers[$class])) {
-            throw new RuntimeException("Serializer with name `{$class}` is not exists");
+            throw new RuntimeException(
+                \sprintf("Serializer with name `%s` is not exists", $class)
+            );
         }
 
         return new $this->serializers[$class]();

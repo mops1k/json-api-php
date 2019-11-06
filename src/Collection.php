@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 class Collection implements ElementInterface
 {
@@ -21,8 +13,8 @@ class Collection implements ElementInterface
     /**
      * Create a new collection instance.
      *
-     * @param mixed $data
-     * @param \Tobscure\JsonApi\SerializerInterface $serializer
+     * @param mixed               $data
+     * @param SerializerInterface $serializer
      */
     public function __construct($data, SerializerInterface $serializer)
     {
@@ -35,7 +27,7 @@ class Collection implements ElementInterface
      * @param mixed $data
      * @param SerializerInterface $serializer
      *
-     * @return \Tobscure\JsonApi\Resource[]
+     * @return Resource[]
      */
     protected function buildResources($data, SerializerInterface $serializer)
     {
@@ -55,7 +47,7 @@ class Collection implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getResources()
+    public function getResources(): array
     {
         return $this->resources;
     }
@@ -65,21 +57,23 @@ class Collection implements ElementInterface
      *
      * @param array $resources
      *
-     * @return void
+     * @return $this
      */
     public function setResources($resources)
     {
         $this->resources = $resources;
+
+        return $this;
     }
 
     /**
      * Request a relationship to be included for all resources.
      *
-     * @param string|array $relationships
+     * @param array $relationships
      *
      * @return $this
      */
-    public function with($relationships)
+    public function with(array $relationships)
     {
         foreach ($this->resources as $resource) {
             $resource->with($relationships);
@@ -95,7 +89,7 @@ class Collection implements ElementInterface
      *
      * @return $this
      */
-    public function fields($fields)
+    public function fields(?array $fields)
     {
         foreach ($this->resources as $resource) {
             $resource->fields($fields);
@@ -107,7 +101,7 @@ class Collection implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
         $results = [];
         foreach ($this->resources as $resource) {
@@ -120,7 +114,7 @@ class Collection implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function toIdentifier()
+    public function toIdentifier(): array
     {
         $results = [];
         foreach ($this->resources as $resource) {

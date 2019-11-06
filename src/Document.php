@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 use JsonSerializable;
 
@@ -18,7 +10,7 @@ class Document implements JsonSerializable
     use LinksTrait;
     use MetaTrait;
 
-    const MEDIA_TYPE = 'application/vnd.api+json';
+    public const MEDIA_TYPE = 'application/vnd.api+json';
 
     /**
      * The included array.
@@ -35,11 +27,11 @@ class Document implements JsonSerializable
     protected $errors;
 
     /**
-     * The jsonapi array.
+     * The json-api array.
      *
      * @var array
      */
-    protected $jsonapi;
+    protected $jsonApi;
 
     /**
      * The data object.
@@ -59,12 +51,12 @@ class Document implements JsonSerializable
     /**
      * Get included resources.
      *
-     * @param \Tobscure\JsonApi\ElementInterface $element
-     * @param bool $includeParent
+     * @param ElementInterface $element
+     * @param bool             $includeParent
      *
-     * @return \Tobscure\JsonApi\Resource[]
+     * @return Resource[]
      */
-    protected function getIncluded(ElementInterface $element, $includeParent = false)
+    protected function getIncluded(ElementInterface $element, bool $includeParent = false): array
     {
         $included = [];
 
@@ -102,7 +94,7 @@ class Document implements JsonSerializable
 
         $flattened = [];
 
-        array_walk_recursive($included, function ($a) use (&$flattened) {
+        \array_walk_recursive($included, function ($a) use (&$flattened) {
             $flattened[] = $a;
         });
 
@@ -110,12 +102,12 @@ class Document implements JsonSerializable
     }
 
     /**
-     * @param \Tobscure\JsonApi\Resource[] $resources
-     * @param \Tobscure\JsonApi\Resource $newResource
+     * @param \JsonApi\Resource[] $resources
+     * @param \JsonApi\Resource   $newResource
      *
-     * @return \Tobscure\JsonApi\Resource[]
+     * @return \JsonApi\Resource[]
      */
-    protected function mergeResource(array $resources, Resource $newResource)
+    protected function mergeResource(array $resources, \JsonApi\Resource $newResource): array
     {
         $type = $newResource->getType();
         $id = $newResource->getId();
@@ -132,7 +124,7 @@ class Document implements JsonSerializable
     /**
      * Set the data object.
      *
-     * @param \Tobscure\JsonApi\ElementInterface $element
+     * @param ElementInterface $element
      *
      * @return $this
      */
@@ -150,7 +142,7 @@ class Document implements JsonSerializable
      *
      * @return $this
      */
-    public function setErrors($errors)
+    public function setErrors(array $errors)
     {
         $this->errors = $errors;
 
@@ -158,15 +150,15 @@ class Document implements JsonSerializable
     }
 
     /**
-     * Set the jsonapi array.
+     * Set the json-api array.
      *
-     * @param array $jsonapi
+     * @param array $jsonApi
      *
      * @return $this
      */
-    public function setJsonapi($jsonapi)
+    public function setJsonApi(array $jsonApi)
     {
-        $this->jsonapi = $jsonapi;
+        $this->jsonApi = $jsonApi;
 
         return $this;
     }
@@ -176,7 +168,7 @@ class Document implements JsonSerializable
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $document = [];
 
@@ -189,8 +181,8 @@ class Document implements JsonSerializable
 
             $resources = $this->getIncluded($this->data);
 
-            if (count($resources)) {
-                $document['included'] = array_map(function (Resource $resource) {
+            if (\count($resources)) {
+                $document['included'] = \array_map(function (Resource $resource) {
                     return $resource->toArray();
                 }, $resources);
             }
@@ -204,8 +196,8 @@ class Document implements JsonSerializable
             $document['errors'] = $this->errors;
         }
 
-        if (!empty($this->jsonapi)) {
-            $document['jsonapi'] = $this->jsonapi;
+        if (!empty($this->jsonApi)) {
+            $document['jsonapi'] = $this->jsonApi;
         }
 
         return $document;
@@ -218,7 +210,7 @@ class Document implements JsonSerializable
      */
     public function __toString()
     {
-        return json_encode($this->toArray());
+        return \json_encode($this->toArray());
     }
 
     /**
@@ -226,7 +218,7 @@ class Document implements JsonSerializable
      *
      * @return array
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return $this->toArray();
     }

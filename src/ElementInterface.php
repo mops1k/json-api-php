@@ -1,47 +1,39 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 interface ElementInterface
 {
     /**
      * Get the resources array.
      *
-     * @return array
+     * @return Resource[]|array
      */
-    public function getResources();
+    public function getResources(): array;
 
     /**
      * Map to a "resource object" array.
      *
      * @return array
      */
-    public function toArray();
+    public function toArray(): array;
 
     /**
      * Map to a "resource object identifier" array.
      *
-     * @return array
+     * @return array|null
      */
-    public function toIdentifier();
+    public function toIdentifier(): ?array;
 
     /**
      * Request a relationship to be included.
      *
-     * @param string|array $relationships
+     * @param array $relationships
      *
      * @return $this
      */
-    public function with($relationships);
+    public function with(array $relationships);
 
     /**
      * Request a restricted set of fields.
@@ -50,5 +42,5 @@ interface ElementInterface
      *
      * @return $this
      */
-    public function fields($fields);
+    public function fields(?array $fields);
 }

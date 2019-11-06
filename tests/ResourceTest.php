@@ -1,21 +1,12 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests;
 
-namespace Tobscure\Tests\JsonApi\Element;
-
-use Tobscure\JsonApi\AbstractSerializer;
-use Tobscure\JsonApi\Collection;
-use Tobscure\JsonApi\Relationship;
-use Tobscure\JsonApi\Resource;
-use Tobscure\Tests\JsonApi\AbstractTestCase;
+use JsonApi\AbstractSerializer;
+use JsonApi\Collection;
+use JsonApi\Relationship;
+use JsonApi\Resource;
 
 class ResourceTest extends AbstractTestCase
 {
@@ -176,7 +167,7 @@ class ResourceTest extends AbstractTestCase
         $post1 = (object)['id' => '123', 'foo' => 'bar'];
 
         $resource1 = new Resource($post1, new PostSerializer4());
-        $resource1->with('author');
+        $resource1->with(['author']);
 
         $this->assertEquals([
             'type' => 'posts',
@@ -195,7 +186,7 @@ class ResourceTest extends AbstractTestCase
         $post1 = (object)['id' => '123', 'foo' => 'bar'];
 
         $resource1 = new Resource($post1, new PostSerializer4());
-        $resource1->with('likes');
+        $resource1->with(['likes']);
 
         $this->assertEquals([
             'type' => 'posts',
@@ -212,9 +203,9 @@ class ResourceTest extends AbstractTestCase
 
 class PostSerializer4 extends AbstractSerializer
 {
-    protected $type = 'posts';
+    public const TYPE = 'posts';
 
-    public function getAttributes($post, array $fields = null)
+    public function getAttributes($post, array $fields = null): array
     {
         $attributes = [];
 
@@ -246,12 +237,12 @@ class PostSerializer4 extends AbstractSerializer
 
 class PostSerializer4WithLinksAndMeta extends PostSerializer4
 {
-    public function getLinks($post)
+    public function getLinks($post): array
     {
         return ['self' => sprintf('/posts/%s', $post->id)];
     }
 
-    public function getMeta($post)
+    public function getMeta($post): array
     {
         return ['some-meta' => sprintf('from-serializer-for-%s', $post->id)];
     }
@@ -259,5 +250,5 @@ class PostSerializer4WithLinksAndMeta extends PostSerializer4
 
 class CommentSerializer extends AbstractSerializer
 {
-    protected $type = 'comments';
+    public const TYPE = 'comments';
 }

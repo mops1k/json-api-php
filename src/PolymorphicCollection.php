@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 class PolymorphicCollection implements ElementInterface
 {
@@ -22,7 +14,7 @@ class PolymorphicCollection implements ElementInterface
      * Create a new collection instance.
      *
      * @param mixed $data
-     * @param \Tobscure\JsonApi\SerializerRegistryInterface $serializers
+     * @param SerializerRegistryInterface $serializers
      */
     public function __construct($data, SerializerRegistryInterface $serializers)
     {
@@ -33,15 +25,15 @@ class PolymorphicCollection implements ElementInterface
      * Convert an array of raw data to Resource objects.
      *
      * @param mixed $data
-     * @param \Tobscure\JsonApi\SerializerRegistryInterface $serializers
-     * @return \Tobscure\JsonApi\Resource[]
+     * @param SerializerRegistryInterface $serializers
+     * @return Resource[]
      */
-    protected function buildResources($data, SerializerRegistryInterface $serializers)
+    protected function buildResources($data, SerializerRegistryInterface $serializers): array
     {
         $resources = [];
 
         foreach ($data as $resource) {
-            if (! ($resource instanceof Resource)) {
+            if (!$resource instanceof Resource) {
                 $resource = new Resource($resource, $serializers->getFromSerializable($resource));
             }
 
@@ -54,7 +46,7 @@ class PolymorphicCollection implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function getResources()
+    public function getResources(): array
     {
         return $this->resources;
     }
@@ -64,21 +56,19 @@ class PolymorphicCollection implements ElementInterface
      *
      * @param array $resources
      *
-     * @return void
+     * @return $this
      */
     public function setResources($resources)
     {
         $this->resources = $resources;
+
+        return $this;
     }
 
     /**
-     * Request a relationship to be included for all resources.
-     *
-     * @param string|array $relationships
-     *
-     * @return $this
+     * @inheritDoc
      */
-    public function with($relationships)
+    public function with(array $relationships)
     {
         foreach ($this->resources as $resource) {
             $resource->with($relationships);
@@ -88,13 +78,9 @@ class PolymorphicCollection implements ElementInterface
     }
 
     /**
-     * Request a restricted set of fields.
-     *
-     * @param array|null $fields
-     *
-     * @return $this
+     * @inheritDoc
      */
-    public function fields($fields)
+    public function fields(?array $fields)
     {
         foreach ($this->resources as $resource) {
             $resource->fields($fields);
@@ -106,9 +92,9 @@ class PolymorphicCollection implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function toArray()
+    public function toArray(): array
     {
-        return array_map(function (Resource $resource) {
+        return \array_map(function (Resource $resource) {
             return $resource->toArray();
         }, $this->resources);
     }
@@ -116,9 +102,9 @@ class PolymorphicCollection implements ElementInterface
     /**
      * {@inheritdoc}
      */
-    public function toIdentifier()
+    public function toIdentifier(): array
     {
-        return array_map(function (Resource $resource) {
+        return \array_map(function (Resource $resource) {
             return $resource->toIdentifier();
         }, $this->resources);
     }

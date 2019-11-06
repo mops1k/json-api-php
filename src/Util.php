@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 class Util
 {
@@ -29,7 +21,7 @@ class Util
      *
      * @return array
      */
-    public static function parseRelationshipPaths(array $paths)
+    public static function parseRelationshipPaths(array $paths): array
     {
         $tree = [];
 

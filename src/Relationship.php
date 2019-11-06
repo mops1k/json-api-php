@@ -1,15 +1,7 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
+namespace JsonApi;
 
 class Relationship
 {
@@ -19,16 +11,16 @@ class Relationship
     /**
      * The data object.
      *
-     * @var \Tobscure\JsonApi\ElementInterface|null
+     * @var ElementInterface|null
      */
     protected $data;
 
     /**
      * Create a new relationship.
      *
-     * @param \Tobscure\JsonApi\ElementInterface|null $data
+     * @param ElementInterface|null $data
      */
-    public function __construct(ElementInterface $data = null)
+    public function __construct(?ElementInterface $data = null)
     {
         $this->data = $data;
     }
@@ -36,9 +28,9 @@ class Relationship
     /**
      * Get the data object.
      *
-     * @return \Tobscure\JsonApi\ElementInterface|null
+     * @return ElementInterface|null
      */
-    public function getData()
+    public function getData(): ?ElementInterface
     {
         return $this->data;
     }
@@ -46,11 +38,11 @@ class Relationship
     /**
      * Set the data object.
      *
-     * @param \Tobscure\JsonApi\ElementInterface|null $data
+     * @param ElementInterface|null $data
      *
      * @return $this
      */
-    public function setData($data)
+    public function setData(?ElementInterface $data): self
     {
         $this->data = $data;
 
@@ -62,7 +54,7 @@ class Relationship
      *
      * @return array
      */
-    public function toArray()
+    public function toArray(): array
     {
         $array = [];
 

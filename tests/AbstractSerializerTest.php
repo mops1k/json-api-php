@@ -1,20 +1,12 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests;
 
-namespace Tobscure\Tests\JsonApi;
-
-use Tobscure\JsonApi\AbstractSerializer;
-use Tobscure\JsonApi\Collection;
-use Tobscure\JsonApi\Relationship;
-use Tobscure\JsonApi\Resource;
+use JsonApi\AbstractSerializer;
+use JsonApi\Collection;
+use JsonApi\Relationship;
+use JsonApi\Resource;
 
 class AbstractSerializerTest extends AbstractTestCase
 {
@@ -69,13 +61,25 @@ class AbstractSerializerTest extends AbstractTestCase
 
         $serializer->getRelationship(null, 'invalid');
     }
+
+    /**
+     * @expectedException \LogicException
+     *
+     * @throws \LogicException
+     */
+    public function testEmptyType()
+    {
+        $serializer = new TypeSerializer();
+
+        $type = $serializer->getType(null);
+    }
 }
 
 class PostSerializer1 extends AbstractSerializer
 {
-    protected $type = 'posts';
+    public const TYPE = 'posts';
 
-    public function getAttributes($post, array $fields = null)
+    public function getAttributes($post, array $fields = null): array
     {
         return ['foo' => $post->foo];
     }
@@ -98,4 +102,9 @@ class PostSerializer1 extends AbstractSerializer
     {
         return 'invalid';
     }
+}
+
+class TypeSerializer extends AbstractSerializer
+{
+    // @stub
 }

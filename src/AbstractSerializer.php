@@ -1,55 +1,41 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
-
-namespace Tobscure\JsonApi;
-
-use LogicException;
+namespace JsonApi;
 
 abstract class AbstractSerializer implements SerializerInterface
 {
     /**
      * The type.
+     */
+    public const TYPE = null;
+
+    /**
+     * {@inheritdoc}
      *
-     * @var string
+     * @throws \LogicException
      */
-    protected $type;
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getType($model)
+    public function getType($model): string
     {
-        return $this->type;
+        if (null === static::TYPE || empty(static::TYPE)) {
+            throw new \LogicException('Type must not be empty.');
+        }
+
+        return (string) static::TYPE;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getId($model)
+    public function getId($model): string
     {
-        return $model->id;
+        return (string) $model->id;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getAttributes($model, array $fields = null)
-    {
-        return [];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getLinks($model)
+    public function getAttributes($model, array $fields = null): array
     {
         return [];
     }
@@ -57,7 +43,15 @@ abstract class AbstractSerializer implements SerializerInterface
     /**
      * {@inheritdoc}
      */
-    public function getMeta($model)
+    public function getLinks($model): array
+    {
+        return [];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getMeta($model): array
     {
         return [];
     }
@@ -67,15 +61,19 @@ abstract class AbstractSerializer implements SerializerInterface
      *
      * @throws \LogicException
      */
-    public function getRelationship($model, $name)
+    public function getRelationship($model, $name): ?Relationship
     {
         $method = $this->getRelationshipMethodName($name);
 
-        if (method_exists($this, $method)) {
+        if (\method_exists($this, $method)) {
             $relationship = $this->$method($model);
 
-            if ($relationship !== null && !($relationship instanceof Relationship)) {
-                throw new LogicException('Relationship method must return null or an instance of Tobscure\JsonApi\Relationship');
+            if (null !== $relationship && !($relationship instanceof Relationship)) {
+                throw new \LogicException(
+                    \sprintf(
+                        'Relationship method must return null or an instance of %s',
+                        Relationship::class
+                    ));
             }
 
             return $relationship;
@@ -93,12 +91,12 @@ abstract class AbstractSerializer implements SerializerInterface
      */
     private function getRelationshipMethodName($name): string
     {
-        if (strpos($name, '-')) {
-            $name = lcfirst(implode('', array_map('ucfirst', explode('-', $name))));
+        if (\strpos($name, '-')) {
+            $name = \lcfirst(\implode('', \array_map('ucfirst', \explode('-', $name))));
         }
 
-        if (strpos($name, '_')) {
-            $name = lcfirst(implode('', array_map('ucfirst', explode('_', $name))));
+        if (\strpos($name, '_')) {
+            $name = \lcfirst(\implode('', \array_map('ucfirst', \explode('_', $name))));
         }
 
         return $name;

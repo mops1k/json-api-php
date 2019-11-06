@@ -1,21 +1,13 @@
 <?php
+declare(strict_types=1);
 
-/*
- * This file is part of JSON-API.
- *
- * (c) Toby Zerner <toby.zerner@gmail.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
+namespace JsonApi\Tests;
 
-namespace Tobscure\Tests\JsonApi;
-
-use Tobscure\JsonApi\AbstractSerializer;
-use Tobscure\JsonApi\Collection;
-use Tobscure\JsonApi\Document;
-use Tobscure\JsonApi\Relationship;
-use Tobscure\JsonApi\Resource;
+use JsonApi\AbstractSerializer;
+use JsonApi\Collection;
+use JsonApi\Document;
+use JsonApi\Relationship;
+use JsonApi\Resource;
 
 /**
  * This is the document test class.
@@ -26,9 +18,9 @@ class DocumentTest extends AbstractTestCase
 {
     public function testToArrayIncludesTheResourcesRepresentation()
     {
-        $post = (object)[
-            'id' => 1,
-            'foo' => 'bar'
+        $post = (object) [
+            'id'  => 1,
+            'foo' => 'bar',
         ];
 
         $resource = new Resource($post, new PostSerializer2);
@@ -40,30 +32,33 @@ class DocumentTest extends AbstractTestCase
 
     public function testItCanBeSerializedToJson()
     {
-        $this->assertEquals('[]', (string)new Document());
+        $this->assertEquals('[]', (string) new Document());
     }
 
     public function testToArrayIncludesIncludedResources()
     {
-        $comment = (object)['id' => 1, 'foo' => 'bar'];
-        $post = (object)['id' => 1, 'foo' => 'bar', 'comments' => [$comment]];
+        $comment = (object) ['id' => 1, 'foo' => 'bar'];
+        $post    = (object) ['id' => 1, 'foo' => 'bar', 'comments' => [$comment]];
 
-        $resource = new Resource($post, new PostSerializer2);
+        $resource         = new Resource($post, new PostSerializer2);
         $includedResource = new Resource($comment, new CommentSerializer2);
 
-        $document = new Document($resource->with('comments'));
+        $document = new Document($resource->with(['comments']));
 
-        $this->assertEquals([
-            'data' => $resource->toArray(),
-            'included' => [
-                $includedResource->toArray()
-            ]
-        ], $document->toArray());
+        $this->assertEquals(
+            [
+                'data'     => $resource->toArray(),
+                'included' => [
+                    $includedResource->toArray(),
+                ],
+            ],
+            $document->toArray()
+        );
     }
 
     public function testNoEmptyAttributes()
     {
-        $post = (object)[
+        $post = (object) [
             'id' => 1,
         ];
 
@@ -71,15 +66,15 @@ class DocumentTest extends AbstractTestCase
 
         $document = new Document($resource);
 
-        $this->assertEquals('{"data":{"type":"posts","id":"1"}}', (string)$document, 'Attributes should be omitted');
+        $this->assertEquals('{"data":{"type":"posts","id":"1"}}', (string) $document, 'Attributes should be omitted');
     }
 }
 
 class PostSerializer2 extends AbstractSerializer
 {
-    protected $type = 'posts';
+    public const TYPE = 'posts';
 
-    public function getAttributes($post, array $fields = null)
+    public function getAttributes($post, array $fields = null): array
     {
         return ['foo' => $post->foo];
     }
@@ -92,7 +87,7 @@ class PostSerializer2 extends AbstractSerializer
 
 class PostSerializerEmptyAttributes2 extends PostSerializer2
 {
-    public function getAttributes($post, array $fields = null)
+    public function getAttributes($post, array $fields = null): array
     {
         return [];
     }
@@ -100,9 +95,9 @@ class PostSerializerEmptyAttributes2 extends PostSerializer2
 
 class CommentSerializer2 extends AbstractSerializer
 {
-    protected $type = 'comments';
+    public const TYPE = 'comments';
 
-    public function getAttributes($comment, array $fields = null)
+    public function getAttributes($comment, array $fields = null): array
     {
         return ['foo' => $comment->foo];
     }
