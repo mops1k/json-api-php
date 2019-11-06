@@ -40,7 +40,7 @@ class AbstractSerializerTest extends AbstractTestCase
 
         $relationship = $serializer->getRelationship(null, 'parent_post');
 
-        $this->assertTrue($relationship instanceof Relationship);
+        $this->assertInstanceOf(Relationship::class, $relationship);
     }
 
     public function testGetRelationshipReturnsRelationshipFromMethodKebabCase()
@@ -49,29 +49,26 @@ class AbstractSerializerTest extends AbstractTestCase
 
         $relationship = $serializer->getRelationship(null, 'parent-post');
 
-        $this->assertTrue($relationship instanceof Relationship);
+        $this->assertInstanceOf(Relationship::class, $relationship);
     }
 
-    /**
-     * @expectedException \LogicException
-     */
     public function testGetRelationshipValidatesRelationship()
     {
+        $this->expectException(\LogicException::class);
         $serializer = new PostSerializer1;
 
         $serializer->getRelationship(null, 'invalid');
     }
 
     /**
-     * @expectedException \LogicException
-     *
      * @throws \LogicException
      */
     public function testEmptyType()
     {
+        $this->expectException(\LogicException::class);
         $serializer = new TypeSerializer();
 
-        $type = $serializer->getType(null);
+        $serializer->getType(null);
     }
 }
 

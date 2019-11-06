@@ -6,8 +6,9 @@ namespace JsonApi\Tests\Exception\Handler;
 use JsonApi\Exception\Handler\InvalidParameterExceptionHandler;
 use JsonApi\Exception\Handler\ResponseBag;
 use JsonApi\Exception\InvalidParameterException;
+use PHPUnit\Framework\TestCase;
 
-class InvalidParameterExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class InvalidParameterExceptionHandlerTest extends TestCase
 {
     public function testHandlerCanManageInvalidParameterExceptions()
     {

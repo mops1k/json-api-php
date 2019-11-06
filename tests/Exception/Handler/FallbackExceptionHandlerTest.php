@@ -5,8 +5,9 @@ namespace JsonApi\Tests\Exception\Handler;
 
 use JsonApi\Exception\Handler\FallbackExceptionHandler;
 use JsonApi\Exception\Handler\ResponseBag;
+use PHPUnit\Framework\TestCase;
 
-class FallbackExceptionHandlerTest extends \PHPUnit_Framework_TestCase
+class FallbackExceptionHandlerTest extends TestCase
 {
     public function testHandlerCanManageExceptions()
     {
