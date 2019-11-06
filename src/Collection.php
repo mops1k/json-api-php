@@ -42,7 +42,7 @@ class Collection implements ElementInterface
         $resources = [];
 
         foreach ($data as $resource) {
-            if (! ($resource instanceof Resource)) {
+            if (!($resource instanceof Resource)) {
                 $resource = new Resource($resource, $serializer);
             }
 
@@ -109,9 +109,12 @@ class Collection implements ElementInterface
      */
     public function toArray()
     {
-        return array_map(function (Resource $resource) {
-            return $resource->toArray();
-        }, $this->resources);
+        $results = [];
+        foreach ($this->resources as $resource) {
+            $results[] = $resource->toArray();
+        }
+
+        return $results;
     }
 
     /**
@@ -119,8 +122,11 @@ class Collection implements ElementInterface
      */
     public function toIdentifier()
     {
-        return array_map(function (Resource $resource) {
-            return $resource->toIdentifier();
-        }, $this->resources);
+        $results = [];
+        foreach ($this->resources as $resource) {
+            $results[] = $resource->toIdentifier();
+        }
+
+        return $results;
     }
 }

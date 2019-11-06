@@ -28,7 +28,7 @@ class AbstractSerializerTest extends AbstractTestCase
     public function testGetAttributesReturnsTheAttributes()
     {
         $serializer = new PostSerializer1;
-        $post = (object) ['foo' => 'bar'];
+        $post = (object)['foo' => 'bar'];
 
         $this->assertEquals(['foo' => 'bar'], $serializer->getAttributes($post));
     }

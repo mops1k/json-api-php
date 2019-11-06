@@ -58,7 +58,7 @@ class FallbackExceptionHandler implements ExceptionHandlerInterface
         $error = ['code' => $status, 'title' => 'Internal server error'];
 
         if ($this->debug) {
-            $error['detail'] = (string) $e;
+            $error['detail'] = (string)$e;
         }
 
         return $error;

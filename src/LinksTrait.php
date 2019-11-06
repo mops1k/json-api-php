@@ -104,7 +104,7 @@ trait LinksTrait
      */
     protected function addPaginationLink($name, $url, array $queryParams, $offset, $limit)
     {
-        if (! isset($queryParams['page']) || ! is_array($queryParams['page'])) {
+        if (!isset($queryParams['page']) || !is_array($queryParams['page'])) {
             $queryParams['page'] = [];
         }
 
@@ -130,6 +130,6 @@ trait LinksTrait
 
         $queryString = http_build_query($queryParams);
 
-        $this->addLink($name, $url.($queryString ? '?'.$queryString : ''));
+        $this->addLink($name, $url . ($queryString ? '?' . $queryString : ''));
     }
 }

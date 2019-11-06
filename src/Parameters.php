@@ -33,9 +33,9 @@ class Parameters
      *
      * @param array $available
      *
+     * @return array
      * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
      *
-     * @return array
      */
     public function getInclude(array $available = [])
     {
@@ -46,7 +46,7 @@ class Parameters
 
             if (count($invalid)) {
                 throw new InvalidParameterException(
-                    'Invalid includes ['.implode(',', $invalid).']',
+                    'Invalid includes [' . implode(',', $invalid) . ']',
                     1,
                     null,
                     'include'
@@ -64,9 +64,9 @@ class Parameters
      *
      * @param int|null $perPage
      *
+     * @return int
      * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
      *
-     * @return int
      */
     public function getOffset($perPage = null)
     {
@@ -74,7 +74,7 @@ class Parameters
             return $offset;
         }
 
-        $offset = (int) $this->getPage('offset');
+        $offset = (int)$this->getPage('offset');
 
         if ($offset < 0) {
             throw new InvalidParameterException('page[offset] must be >=0', 2, null, 'page[offset]');
@@ -88,13 +88,13 @@ class Parameters
      *
      * @param int $perPage
      *
+     * @return int
      * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
      *
-     * @return int
      */
     protected function getOffsetFromNumber($perPage)
     {
-        $page = (int) $this->getPage('number');
+        $page = (int)$this->getPage('number');
 
         if ($page <= 1) {
             return 0;
@@ -126,9 +126,9 @@ class Parameters
      *
      * @param array $available
      *
+     * @return array
      * @throws \Tobscure\JsonApi\Exception\InvalidParameterException
      *
-     * @return array
      */
     public function getSort(array $available = [])
     {
@@ -138,7 +138,7 @@ class Parameters
             $fields = explode(',', $input);
 
             foreach ($fields as $field) {
-                if (substr($field, 0, 1) === '-') {
+                if (strpos($field, '-') === 0) {
                     $field = substr($field, 1);
                     $order = 'desc';
                 } else {
@@ -152,7 +152,7 @@ class Parameters
 
             if (count($invalid)) {
                 throw new InvalidParameterException(
-                    'Invalid sort fields ['.implode(',', $invalid).']',
+                    'Invalid sort fields [' . implode(',', $invalid) . ']',
                     3,
                     null,
                     'sort'
@@ -172,13 +172,16 @@ class Parameters
     {
         $fields = $this->getInput('fields');
 
-        if (! is_array($fields)) {
+        if (!is_array($fields)) {
             return [];
         }
 
-        return array_map(function ($fields) {
-            return explode(',', $fields);
-        }, $fields);
+        $results = [];
+        foreach ($fields as $key => $field) {
+            $results[$key] = explode(',', $field);
+        }
+
+        return $results;
     }
 
     /**
@@ -201,7 +204,7 @@ class Parameters
      */
     protected function getInput($key, $default = null)
     {
-        return isset($this->input[$key]) ? $this->input[$key] : $default;
+        return $this->input[$key] ?? $default;
     }
 
     /**
@@ -215,6 +218,6 @@ class Parameters
     {
         $page = $this->getInput('page');
 
-        return isset($page[$key]) ? $page[$key] : '';
+        return $page[$key] ?? '';
     }
 }

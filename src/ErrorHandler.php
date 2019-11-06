@@ -29,9 +29,9 @@ class ErrorHandler
      *
      * @param Exception $e
      *
+     * @return \Tobscure\JsonApi\Exception\Handler\ResponseBag
      * @throws RuntimeException
      *
-     * @return \Tobscure\JsonApi\Exception\Handler\ResponseBag
      */
     public function handle(Exception $e)
     {
@@ -41,7 +41,7 @@ class ErrorHandler
             }
         }
 
-        throw new RuntimeException('Exception handler for '.get_class($e).' not found.');
+        throw new RuntimeException('Exception handler for ' . get_class($e) . ' not found.');
     }
 
     /**
